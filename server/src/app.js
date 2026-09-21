@@ -13,6 +13,7 @@ import marketRouter from "./routes/market.routes.js";
 import expertRouter from "./routes/expert.routes.js";
 import farmerRouter from "./routes/farmer.routes.js";
 import intelligenceRouter from "./routes/intelligence.routes.js";
+import designerRouter from "./routes/designer.routes.js";
 import { requireAuth as authMiddleware } from "./middleware/auth.middleware.js";
 import { errorHandler } from "./middleware/error.middleware.js";
 
@@ -31,6 +32,7 @@ app.get("/api/health", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/farms", authMiddleware, farmRouter);
 app.use("/api/farms", authMiddleware, soilRouter);
+app.use("/api/farms", authMiddleware, designerRouter);
 app.use("/api/zones", authMiddleware, cropRouter);
 app.use("/api/zones", authMiddleware, calcRouter);
 app.use("/api/farms", authMiddleware, economicsRouter);

@@ -8,7 +8,10 @@ export default function FarmPlannerPage() {
   if (!farmId) return null;
 
   return (
-    <DashboardShell>
+    <DashboardShell
+      title="Farm Planner & Crop Assigning"
+      subtitle="Assign recommended crops to each zone and view multi-layer farming structure."
+    >
       <FarmPlannerTool farmId={farmId} />
     </DashboardShell>
   );

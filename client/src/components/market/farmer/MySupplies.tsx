@@ -15,7 +15,7 @@ const STATUS_COLORS: Record<string, string> = {
   EXPIRED:        'bg-stone-200 text-stone-500',
 };
 
-const GRADE_COLORS: Record<ProduceGrade, string> = {
+export const GRADE_COLORS: Record<ProduceGrade, string> = {
   A: 'bg-green-100 text-green-700',
   B: 'bg-amber-100 text-amber-700',
   C: 'bg-rose-100 text-rose-600',
@@ -279,7 +279,7 @@ export default function MySupplies() {
                               {STATUS_LABELS[s.status]}
                             </span>
                           </div>
-                          <div className="col-span-1 text-[11px] text-stone-400 truncate" title={s.zone?.name ?? s.zoneId}>
+                          <div className="col-span-1 text-[11px] text-stone-400 truncate" title={s.zone?.name ?? s.zoneId ?? undefined}>
                             {s.zone?.name ?? '—'}
                           </div>
                           <div className="col-span-2 text-sm font-medium text-stone-700">{fmt(s.predictedHarvestDate)}</div>

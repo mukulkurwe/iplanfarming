@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Cloud, AlertTriangle, TrendingUp, IndianRupee, Award as AwardIcon, FileText, Users, Wrench, ScrollText, ListChecks, Target, Sparkles, BookOpen } from 'lucide-react';
+import { Cloud, AlertTriangle, TrendingUp, Users, Wrench, ScrollText, ListChecks, Target, Sparkles, BookOpen } from 'lucide-react';
 import DashboardShell from '../components/DashboardShell';
 import {
   getWeatherAlerts, getPestAlerts, getMandiPrices, getGovSchemes,

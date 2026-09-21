@@ -398,6 +398,10 @@ export default function FarmDashboard({ farmId }: FarmDashboardProps) {
         <div className="rounded-[28px] border border-stone-200 bg-white p-5 shadow-sm">
           <h3 className="text-lg font-semibold text-stone-900">Tools</h3>
           <div className="mt-4 space-y-3">
+            <button type="button" onClick={() => navigate(`/dashboard/farm/${farmId}/designer`)}
+              className="flex min-h-12 w-full items-center gap-3 rounded-2xl border border-emerald-300 bg-gradient-to-r from-emerald-600 to-green-700 px-4 text-left text-sm font-bold text-white shadow-md transition hover:from-emerald-700 hover:to-green-800">
+              <Sparkles className="h-5 w-5 text-amber-300" /> Farm Designer &amp; Bed Studio
+            </button>
             <button type="button" onClick={() => navigate(`/dashboard/farm/${farmId}/soil`)}
               className="flex min-h-12 w-full items-center gap-3 rounded-2xl border border-green-200 bg-green-50 px-4 text-left text-sm font-medium text-green-800 transition hover:bg-green-100">
               <Sprout className="h-4 w-4" /> Zone Crop Planner

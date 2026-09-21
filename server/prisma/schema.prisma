@@ -119,6 +119,7 @@ model Farm {
   supplies           Supply[]
   expertAdvisories   ExpertAdvisory[]
   expertSuggestions  ExpertCropSuggestion[]
+  designs            FarmDesign[]
   createdAt          DateTime       @default(now())
   updatedAt          DateTime       @updatedAt
 }
@@ -860,3 +861,23 @@ model EconomicsConfig {
   updatedAt          DateTime @updatedAt
   createdAt          DateTime @default(now())
 }
+
+/// Saved layouts and bed plans created in Farm Designer Studio.
+/// Stored independently without affecting existing farm mapping and zone geometry.
+model FarmDesign {
+  id             String   @id @default(uuid())
+  farmId         String
+  name           String   @default("Untitled Farm Layout")
+  version        Int      @default(1)
+  status         String   @default("DRAFT") // DRAFT | FINAL
+  gridSizeMeters Float    @default(2.0)
+  designData     Json     // { beds: [...], crops: [...], trees: [...], elements: [...], layers: {...}, settings: {...} }
+  previewImage   String?  // base64 thumbnail or data URL
+  notes          String?
+  farm           Farm     @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([farmId, status])
+}
+

@@ -155,7 +155,7 @@ export default function AddTaskModal({ farmId, date, zoneMeta, editEvent, onClos
               <label className="mb-1.5 block text-xs font-semibold text-stone-500 uppercase tracking-wider">Category</label>
               <select
                 value={category}
-                onChange={(e) => setCategory(e.target.value)}
+                onChange={(e) => setCategory(e.target.value as any)}
                 className="w-full rounded-xl border border-stone-200 px-4 py-2.5 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-green-500"
               >
                 {CATEGORIES.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}

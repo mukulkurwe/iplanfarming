@@ -27,6 +27,7 @@ import ChecklistPage from './pages/ChecklistPage';
 import CommunityPage from './pages/CommunityPage';
 import ExpertCataloguesPage from './pages/ExpertCataloguesPage';
 import SeasonReportPage from './pages/SeasonReportPage';
+import FarmDesignerPage from './pages/FarmDesignerPage';
 import { Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { getOnboardingStatus } from './lib/api';
@@ -82,6 +83,8 @@ function App() {
             <Route path="/dashboard/farm/:farmId/plan" element={<FarmPlannerPage />} />
             <Route path="/dashboard/farm/:farmId/water" element={<WaterManagementPage />} />
             <Route path="/dashboard/farm/:farmId/calendar" element={<FarmCalendarPage />} />
+            <Route path="/dashboard/farm/:farmId/designer" element={<FarmDesignerPage />} />
+            <Route path="/dashboard/farm/:farmId/designer/:designId" element={<FarmDesignerPage />} />
             <Route path="/market" element={<MarketPage />} />
             <Route path="/expert" element={<ExpertPage />} />
             <Route path="/today" element={<TodayPage />} />

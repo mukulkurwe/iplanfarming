@@ -8,7 +8,10 @@ export default function FarmEconomicsPage() {
   if (!farmId) return null;
 
   return (
-    <DashboardShell>
+    <DashboardShell
+      title="Farm Economics & Profit Analysis"
+      subtitle="Analyze multi-layer crop yields, costs, processing margins, and infrastructure payback."
+    >
       <FarmEconomicsTool farmId={farmId} />
     </DashboardShell>
   );
