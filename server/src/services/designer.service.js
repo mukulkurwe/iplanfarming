@@ -1,6 +1,37 @@
+import fs from "fs/promises";
+import path from "path";
 import prisma from "../config/prisma.js";
 import { AppError } from "../utils/errors.js";
 import { getFarmerIdFromUser } from "../utils/serviceUtils.js";
+
+const DESIGNS_DIR = path.resolve(process.cwd(), "storage", "designs");
+
+/**
+ * Safely saves a static JSON backup of the design to the server filesystem.
+ */
+const persistDesignToJsonFile = async (farmId, designId, designRecord) => {
+  try {
+    await fs.mkdir(DESIGNS_DIR, { recursive: true });
+    const fileName = `${farmId}_${designId}.json`;
+    const filePath = path.join(DESIGNS_DIR, fileName);
+    await fs.writeFile(filePath, JSON.stringify(designRecord, null, 2), "utf-8");
+  } catch (err) {
+    console.error(`[DesignerService] Failed to persist static JSON for design ${designId}:`, err);
+  }
+};
+
+/**
+ * Safely deletes the static JSON backup from the server filesystem.
+ */
+const removeDesignJsonFile = async (farmId, designId) => {
+  try {
+    const fileName = `${farmId}_${designId}.json`;
+    const filePath = path.join(DESIGNS_DIR, fileName);
+    await fs.unlink(filePath);
+  } catch {
+    // Ignore if file doesn't exist
+  }
+};
 
 /**
  * Asserts that the authenticated user owns or has access to the farm.
@@ -62,7 +93,7 @@ export const createFarmDesign = async (farmId, user, payload) => {
     throw new AppError("designData is required", 400);
   }
 
-  return prisma.farmDesign.create({
+  const created = await prisma.farmDesign.create({
     data: {
       farmId,
       name: name?.trim() || "Untitled Farm Layout",
@@ -74,6 +105,11 @@ export const createFarmDesign = async (farmId, user, payload) => {
       notes: notes || null,
     },
   });
+
+  // Save static .json backup file
+  await persistDesignToJsonFile(farmId, created.id, created);
+
+  return created;
 };
 
 export const updateFarmDesign = async (farmId, designId, user, payload) => {
@@ -85,7 +121,7 @@ export const updateFarmDesign = async (farmId, designId, user, payload) => {
 
   const { name, status, gridSizeMeters, designData, previewImage, notes, incrementVersion } = payload;
 
-  return prisma.farmDesign.update({
+  const updated = await prisma.farmDesign.update({
     where: { id: designId },
     data: {
       name: name !== undefined ? name.trim() : existing.name,
@@ -97,6 +133,11 @@ export const updateFarmDesign = async (farmId, designId, user, payload) => {
       notes: notes !== undefined ? notes : existing.notes,
     },
   });
+
+  // Update static .json backup file
+  await persistDesignToJsonFile(farmId, updated.id, updated);
+
+  return updated;
 };
 
 export const deleteFarmDesign = async (farmId, designId, user) => {
@@ -109,6 +150,10 @@ export const deleteFarmDesign = async (farmId, designId, user) => {
   await prisma.farmDesign.delete({
     where: { id: designId },
   });
+
+  // Clean up static .json backup file
+  await removeDesignJsonFile(farmId, designId);
+
   return { success: true, message: "Design deleted successfully" };
 };
 
@@ -119,7 +164,7 @@ export const duplicateFarmDesign = async (farmId, designId, user) => {
   });
   if (!original) throw new AppError("Original design not found", 404);
 
-  return prisma.farmDesign.create({
+  const duplicated = await prisma.farmDesign.create({
     data: {
       farmId,
       name: `${original.name} (Copy)`,
@@ -131,4 +176,10 @@ export const duplicateFarmDesign = async (farmId, designId, user) => {
       notes: original.notes ? `Cloned from ${original.name}. ${original.notes}` : `Cloned from ${original.name}`,
     },
   });
+
+  // Save static .json backup file for duplicate
+  await persistDesignToJsonFile(farmId, duplicated.id, duplicated);
+
+  return duplicated;
 };
+
